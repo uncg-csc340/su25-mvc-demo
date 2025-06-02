@@ -139,6 +139,16 @@ public class StudentService {
    * @param studentId The ID of the student to delete
    */
   public void deleteStudent(Long studentId) {
+    Student student = studentRepository.findById(studentId).orElse(null);
+    if (student == null) {
+      return; // Student not found, nothing to delete
+    }
+    Path filePath = Paths.get(UPLOAD_DIR + student.getProfilePicturePath());
+    try {
+      Files.deleteIfExists(filePath);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     studentRepository.deleteById(studentId);
   }
 
