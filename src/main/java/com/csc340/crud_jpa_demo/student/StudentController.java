@@ -159,7 +159,8 @@ public class StudentController {
    * @param id The ID of the student to delete
    * @return List of all students
    */
-  @DeleteMapping("/students/{id}")
+  // @DeleteMapping("/students/{id}")
+  @GetMapping("/students/delete/{id}")
   public Object deleteStudent(@PathVariable Long id) {
     studentService.deleteStudent(id);
     return "redirect:/students/";

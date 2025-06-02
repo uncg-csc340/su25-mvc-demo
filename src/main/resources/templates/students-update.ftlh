@@ -42,7 +42,9 @@
       <input type="text" id="name" name="name" value="${student.name}" placeholder="Name" />
       <input type="email" id="email" name="email" value="${student.email}" placeholder="example@domain.edu" />
       <input type="text" id="major" name="major" value="${student.major}" placeholder="Major" />
-      <input type="number" id="gpa" name="gpa" step="0.01" value="${student.gpa}" placeholder="GPA" />
+      <input type="number" id="gpa" name="gpa" step="0.01" value="${student.gpa}" placeholder="GPA" /><br>
+      <label for="profilePicturePath" class="form-label">Current Picture</label>
+      <input type="text" id="profilePicturePath" name="profilePicturePath" value="${(student.profilePicturePath)}" readonly />
       <input type="file" id="picture" name="picture" />
       <button type="submit" class="btn btn-primary">Save</button>
       <a href="/students/${student.studentId?c}" class="btn btn-outline-danger">Cancel</a>

@@ -39,7 +39,7 @@
         <input type="email" id="email" name="email" placeholder="example@domain.edu"/>
         <input type="text" id="major" name="major" placeholder="Major"/>
         <input type="number" id="gpa" name="gpa" step="0.01" placeholder="GPA"/>
-        <input type="file" id="picture" name="picture" />
+        <input type="file" id="picture" name="picture" required/>
         <button type="submit" class="btn btn-primary">Save</button>
        <a href="/students" class="btn btn-outline-danger" >Cancel</a>
     </form>
