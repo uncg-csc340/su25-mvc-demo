@@ -91,13 +91,12 @@ public class StudentService {
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
         String fileName = String.valueOf(newStudent.getStudentId()) + "." + fileExtension;
         Path filePath = Paths.get(UPLOAD_DIR + fileName);
+
         InputStream inputStream = profilePicture.getInputStream();
 
         Files.createDirectories(Paths.get(UPLOAD_DIR));// Ensure directory exists
         Files.copy(inputStream, filePath,
-            StandardCopyOption.REPLACE_EXISTING);
-
-        // profilePicture.transferTo(filePath.toFile()); // Save file
+            StandardCopyOption.REPLACE_EXISTING);// Save file
         newStudent.setProfilePicturePath(fileName);
       }
     } catch (Exception e) {
@@ -113,7 +112,24 @@ public class StudentService {
    * @param studentId The ID of the student to update
    * @param student   The updated student information
    */
-  public Student updateStudent(Long studentId, Student student) {
+  public Student updateStudent(Long studentId, Student student, MultipartFile profilePicture) {
+    String originalFileName = profilePicture.getOriginalFilename();
+
+    try {
+      if (originalFileName != null && originalFileName.contains(".")) {
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        String fileName = String.valueOf(studentId) + "." + fileExtension;
+        Path filePath = Paths.get(UPLOAD_DIR + fileName);
+
+        InputStream inputStream = profilePicture.getInputStream();
+        Files.deleteIfExists(filePath);
+        Files.copy(inputStream, filePath,
+            StandardCopyOption.REPLACE_EXISTING);// Save file
+        student.setProfilePicturePath(fileName);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     return studentRepository.save(student);
   }
 

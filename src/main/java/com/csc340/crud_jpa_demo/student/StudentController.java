@@ -59,11 +59,13 @@ public class StudentController {
    * @return List of students with the specified name
    */
   @GetMapping("/students/name")
-  public Object getStudentsByName(@RequestParam String key) {
+  public Object getStudentsByName(@RequestParam String key, Model model) {
     if (key != null) {
-      return studentService.getStudentsByName(key);
+      model.addAttribute("studentsList", studentService.getStudentsByName(key));
+      model.addAttribute("title", "Students By Name: " + key);
+      return "students-list";
     } else {
-      return studentService.getAllStudents();
+      return "redirect:/students/";
     }
 
   }
@@ -75,8 +77,12 @@ public class StudentController {
    * @return List of students with the specified major
    */
   @GetMapping("/students/major/{major}")
-  public Object getStudentsByMajor(@PathVariable String major) {
-    return studentService.getStudentsByMajor(major);
+  public Object getStudentsByMajor(@PathVariable String major, Model model) {
+    // return studentService.getStudentsByMajor(major);
+    model.addAttribute("studentsList", studentService.getStudentsByMajor(major));
+    model.addAttribute("title", "Students By Major: " + major);
+    return "students-list";
+
   }
 
   /**
@@ -90,6 +96,12 @@ public class StudentController {
     return new ResponseEntity<>(studentService.getHonorsStudents(gpa), HttpStatus.OK);
 
   }
+  /**
+   * Endpoint to show the create form for a new student
+   *
+   * @param model The model to add attributes to
+   * @return The view name for the create form
+   */
 
   @GetMapping("/students/createForm")
   public Object showCreateForm(Model model) {
@@ -106,10 +118,25 @@ public class StudentController {
    * @return List of all students
    */
   @PostMapping("/students")
-  public Object addStudent(Student student, @RequestParam MultipartFile picture, Model model) {
+  public Object addStudent(Student student, @RequestParam MultipartFile picture) {
     // return studentService.addStudent(student, picture);
     Student newStudent = studentService.addStudent(student, picture);
     return "redirect:/students/" + newStudent.getStudentId();
+  }
+
+  /**
+   * Endpoint to show the update form for a student
+   *
+   * @param id    The ID of the student to update
+   * @param model The model to add attributes to
+   * @return The view name for the update form
+   */
+  @GetMapping("/students/updateForm/{id}")
+  public Object showUpdateForm(@PathVariable Long id, Model model) {
+    Student student = studentService.getStudentById(id);
+    model.addAttribute("student", student);
+    model.addAttribute("title", "Update Student: " + id);
+    return "students-update";
   }
 
   /**
@@ -119,10 +146,11 @@ public class StudentController {
    * @param student The updated student information
    * @return The updated student
    */
-  @PutMapping("/students/{id}")
-  public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
-    studentService.updateStudent(id, student);
-    return studentService.getStudentById(id);
+  //@PutMapping("/students/{id}")
+  @PostMapping("/students/update/{id}")
+  public Object updateStudent(@PathVariable Long id,  Student student, @RequestParam MultipartFile picture) {
+    studentService.updateStudent(id, student, picture);
+    return "redirect:/students/" + id;
   }
 
   /**
@@ -134,7 +162,7 @@ public class StudentController {
   @DeleteMapping("/students/{id}")
   public Object deleteStudent(@PathVariable Long id) {
     studentService.deleteStudent(id);
-    return studentService.getAllStudents();
+    return "redirect:/students/";
   }
 
   /**

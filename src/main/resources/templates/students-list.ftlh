@@ -38,7 +38,7 @@
     <a href="/students/createForm" class="btn btn-outline-primary" style="float:right;">Create New Student</a>
 
     <form action="/students/name">
-        <input type="text" name="search" placeholder="Search By Name &#128270;">
+        <input type="text" name="key" placeholder="Search By Name &#128270;">
     </form>
 
     <!-- Students Table -->
